@@ -87,8 +87,9 @@
         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
 
-    <audio autoplay loop>
-        <source src="https://youtu.be/XLunTSk5Z-c?si=6FyW31EkJ4v1ZETW" type="audio/mp3">
+    <!-- BGM audio yang diputar terus-menerus -->
+    <audio id="bgmAudio" autoplay loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
     </audio>
 
     <script>
@@ -126,36 +127,4 @@
                 document.querySelector("h1").style.display = "none";
 
                 // Putar video YouTube setelah countdown selesai
-                const youtubePlayer = document.getElementById("youtubePlayerRamadhan");
-                youtubePlayer.style.display = "block";
-            }
-        }
-
-        const interval = setInterval(updateCountdown, 1000);
-
-        // Fungsi untuk membagikan halaman
-        function sharePage() {
-            const shareText = "Ayo lihat hitung mundur Ramadhan!";
-            const shareUrl = window.location.href;
-
-            if (navigator.share) {
-                navigator.share({
-                    title: "Hitung Mundur Ramadhan",
-                    text: shareText, // Pastikan pesan ini ditambahkan
-                    url: shareUrl,
-                })
-                .then(() => console.log('Berhasil dibagikan!'))
-                .catch((err) => console.error('Gagal membagikan:', err));
-            } else {
-                alert("Fitur berbagi tidak tersedia pada perangkat ini.");
-            }
-        }
-    </script>
-
-    <!-- Tombol Bagikan -->
-    <button class="share-button" onclick="sharePage()">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Sharethis.svg" alt="Bagikan">
-    </button>
-</body>
-  </html>
-      
+                const youtubePlayer =
