@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Ramadhan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #000428, #004e92);
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-top: 20px;
+        }
+        p {
+            font-size: 2em;
+            margin: 20px 0;
+        }
+        .crescent {
+            display: none;
+            position: absolute;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            animation: slideDown 2s forwards;
+        }
+        @keyframes slideDown {
+            to {
+                top: 50px;
+            }
+        }
+        .youtubePlayer {
+            display: none;
+            margin-top: 20px;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://raw.githubusercontent.com/istarsis/assets/main/stars.png') repeat;
+            animation: twinkling 200s linear infinite;
+        }
+        @keyframes twinkling {
+            from {background-position: 0 0;}
+            to {background-position: -10000px 5000px;}
+        }
+        audio {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: -1;
+        }
+        .share-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        .share-button img {
+            width: 40px;
+            height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <h1>Hitung Mundur ke Ramadhan</h1>
+    <p id="countdownRamadhan"></p>
+    <img class="crescent" id="crescentImageRamadhan" src="https://upload.wikimedia.org/wikipedia/commons/0/09/Star_and_Crescent.svg" alt="Bulan Sabit">
+    <div class="youtubePlayer" id="youtubePlayerRamadhan">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/XLunTSk5Z-c?autoplay=1" 
+        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+    <audio autoplay loop>
+        <source src="https://youtu.be/XLunTSk5Z-c?si=6FyW31EkJ4v1ZETW" type="audio/mp3">
+    </audio>
+
+    <script>
+        // Set waktu target Ramadhan (misal 2025-03-23 00:00)
+        const now = new Date();
+        const targetTime = new Date('2025-03-23T00:00:00');
+
+        // Jika waktu saat ini sudah lewat target, target waktu jadi tahun depan
+        if (now > targetTime) {
+            targetTime.setFullYear(targetTime.getFullYear() + 1);
+        }
+
+        function updateCountdown() {
+            const currentTime = new Date().getTime();
+            const distance = targetTime - currentTime;
+
+            if (distance > 0) {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("countdownRamadhan").innerHTML =
+                    days + " Hari " + hours + " Jam " + minutes + " Menit " + seconds + " Detik ";
+            } else {
+                document.getElementById("countdownRamadhan").innerHTML = "Ramadhan Telah Tiba!";
+                clearInterval(interval);
+
+                // Tampilkan bulan sabit dengan animasi
+                const crescent = document.getElementById("crescentImageRamadhan");
+                crescent.style.display = "block";
+
+                // Sembunyikan teks
+                document.getElementById("countdownRamadhan").style.display = "none";
+                document.querySelector("h1").style.display = "none";
+
+                // Putar video YouTube setelah countdown selesai
+                const youtubePlayer = document.getElementById("youtubePlayerRamadhan");
+                youtubePlayer.style.display = "block";
+            }
+        }
+
+        const interval = setInterval(updateCountdown, 1000);
+
+        // Fungsi untuk membagikan halaman
+        function sharePage() {
+            const shareText = "Ayo lihat hitung mundur Ramadhan!";
+            const shareUrl = window.location.href;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: "Hitung Mundur Ramadhan",
+                    text: shareText, // Pastikan pesan ini ditambahkan
+                    url: shareUrl,
+                })
+                .then(() => console.log('Berhasil dibagikan!'))
+                .catch((err) => console.error('Gagal membagikan:', err));
+            } else {
+                alert("Fitur berbagi tidak tersedia pada perangkat ini.");
+            }
+        }
+    </script>
+
+    <!-- Tombol Bagikan -->
+    <button class="share-button" onclick="sharePage()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Sharethis.svg" alt="Bagikan">
+    </button>
+</body>
+  </html>
+      
