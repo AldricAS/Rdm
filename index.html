@@ -57,12 +57,6 @@
             from {background-position: 0 0;}
             to {background-position: -10000px 5000px;}
         }
-        audio {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            z-index: -1;
-        }
         .share-button {
             position: fixed;
             bottom: 20px;
@@ -83,15 +77,9 @@
     <p id="countdownRamadhan"></p>
     <img class="crescent" id="crescentImageRamadhan" src="https://upload.wikimedia.org/wikipedia/commons/0/09/Star_and_Crescent.svg" alt="Bulan Sabit">
     <div class="youtubePlayer" id="youtubePlayerRamadhan">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/XLunTSk5Z-c?autoplay=1" 
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/XLunTSk5Z-c?autoplay=1&loop=1&playlist=XLunTSk5Z-c" 
         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
-
-    <!-- BGM audio dari file lokal bgm.mp3 -->
-    <audio id="bgmAudio" autoplay loop>
-        <source src="bgm.mp3" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio>
 
     <script>
         // Set waktu target Ramadhan (misal 2025-03-23 00:00)
@@ -102,6 +90,12 @@
         if (now > targetTime) {
             targetTime.setFullYear(targetTime.getFullYear() + 1);
         }
+
+        // Putar video YouTube secara otomatis saat halaman dimuat
+        window.onload = function() {
+            const youtubePlayer = document.getElementById("youtubePlayerRamadhan");
+            youtubePlayer.style.display = "block"; // Tampilkan video
+        };
 
         function updateCountdown() {
             const currentTime = new Date().getTime();
@@ -126,6 +120,33 @@
                 // Sembunyikan teks
                 document.getElementById("countdownRamadhan").style.display = "none";
                 document.querySelector("h1").style.display = "none";
+            }
+        }
 
-                // Putar video YouTube setelah countdown selesai
-                const youtubePlayer = document.getElementById("youtubePlayerRamadha
+        const interval = setInterval(updateCountdown, 1000);
+
+        // Fungsi untuk membagikan halaman
+        function sharePage() {
+            const shareText = "Ayo lihat hitung mundur Ramadhan!";
+            const shareUrl = window.location.href;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: "Hitung Mundur Ramadhan",
+                    text: shareText, // Pastikan pesan ini ditambahkan
+                    url: shareUrl,
+                })
+                .then(() => console.log('Berhasil dibagikan!'))
+                .catch((err) => console.error('Gagal membagikan:', err));
+            } else {
+                alert("Fitur berbagi tidak tersedia pada perangkat ini.");
+            }
+        }
+    </script>
+
+    <!-- Tombol Bagikan -->
+    <button class="share-button" onclick="sharePage()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Sharethis.svg" alt="Bagikan">
+    </button>
+</body>
+</html>
